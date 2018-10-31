@@ -1,6 +1,7 @@
 package xyz.riocode.guruspring.recipe.domain;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -24,10 +25,12 @@ public class CategoryTest {
         assertEquals(id, category.getId());
     }
 
+    @Ignore
     @Test
     public void getDescription() {
     }
 
+    @Ignore
     @Test
     public void getRecipes() {
     }
