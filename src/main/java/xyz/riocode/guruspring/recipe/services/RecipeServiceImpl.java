@@ -6,6 +6,7 @@ import xyz.riocode.guruspring.recipe.domain.Recipe;
 import xyz.riocode.guruspring.recipe.repositories.RecipeRepository;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Slf4j
@@ -26,5 +27,15 @@ public class RecipeServiceImpl implements RecipeService {
         recipeRepository.findAll().iterator().forEachRemaining(recipeSet::add);
 
         return recipeSet;
+    }
+
+    @Override
+    public Recipe findById(Long id) {
+        Optional<Recipe> recipeOpt = recipeRepository.findById(id);
+        if(!recipeOpt.isPresent()) {
+            throw new RuntimeException("Recipe not found!");
+        }
+
+        return recipeOpt.get();
     }
 }
