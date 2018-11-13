@@ -142,6 +142,10 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
         guacRecipe.getCategories().add(americanCategory);
         guacRecipe.getCategories().add(mexicanCategory);
 
+        guacRecipe.setUrl("https://www.allrecipes.com/recipe/43655/perfect-turkey/?internalSource=streams&referringId=975&referringContentType=Recipe%20Hub&clickId=st_trending_b");
+        guacRecipe.setServings(4);
+        guacRecipe.setSource("All Recipes");
+
         //add to return list
         recipes.add(guacRecipe);
 
