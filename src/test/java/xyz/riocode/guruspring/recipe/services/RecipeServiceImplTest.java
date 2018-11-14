@@ -5,6 +5,8 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import xyz.riocode.guruspring.recipe.converters.RecipeCommandToRecipe;
+import xyz.riocode.guruspring.recipe.converters.RecipeToRecipeCommand;
 import xyz.riocode.guruspring.recipe.domain.Recipe;
 import xyz.riocode.guruspring.recipe.repositories.RecipeRepository;
 
@@ -22,16 +24,22 @@ public class RecipeServiceImplTest {
     private RecipeServiceImpl recipeService;
 
     @Mock
+    private RecipeToRecipeCommand recipeToRecipeCommand;
+
+    @Mock
+    private RecipeCommandToRecipe recipeCommandToRecipe;
+
+    @Mock
     RecipeRepository recipeRepository;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        recipeService = new RecipeServiceImpl(recipeRepository);
+        recipeService = new RecipeServiceImpl(recipeRepository, recipeCommandToRecipe, recipeToRecipeCommand);
     }
 
     @Test
-    public void getRecipes() {
+    public void testGetRecipes() {
 
         Recipe recipe = new Recipe();
         HashSet<Recipe> recipes = new HashSet<>();
@@ -60,6 +68,12 @@ public class RecipeServiceImplTest {
         assertNotNull("Null recipe returned", recipe);
         verify(recipeRepository, times(1)).findById(anyLong());
         verify(recipeRepository, never()).findAll();
+
+    }
+
+
+    @Test
+    public void testSaveRecipeCommand() {
 
     }
 }
