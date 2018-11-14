@@ -2,6 +2,10 @@ package xyz.riocode.guruspring.recipe.services;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import xyz.riocode.guruspring.recipe.commands.RecipeCommand;
+import xyz.riocode.guruspring.recipe.converters.RecipeCommandToRecipe;
+import xyz.riocode.guruspring.recipe.converters.RecipeToRecipeCommand;
 import xyz.riocode.guruspring.recipe.domain.Recipe;
 import xyz.riocode.guruspring.recipe.repositories.RecipeRepository;
 
@@ -14,9 +18,13 @@ import java.util.Set;
 public class RecipeServiceImpl implements RecipeService {
 
     private final RecipeRepository recipeRepository;
+    private final RecipeCommandToRecipe recipeCommandToRecipe;
+    private final RecipeToRecipeCommand recipeToRecipeCommand;
 
-    public RecipeServiceImpl(RecipeRepository recipeRepository) {
+    public RecipeServiceImpl(RecipeRepository recipeRepository, RecipeCommandToRecipe recipeCommandToRecipe, RecipeToRecipeCommand recipeToRecipeCommand) {
         this.recipeRepository = recipeRepository;
+        this.recipeCommandToRecipe = recipeCommandToRecipe;
+        this.recipeToRecipeCommand = recipeToRecipeCommand;
     }
 
     @Override
@@ -37,5 +45,15 @@ public class RecipeServiceImpl implements RecipeService {
         }
 
         return recipeOpt.get();
+    }
+
+    @Transactional
+    @Override
+    public RecipeCommand saveRecipeCommand(RecipeCommand command) {
+        Recipe detachedRecipe = recipeCommandToRecipe.convert(command);
+
+        Recipe savedRecipe = recipeRepository.save(detachedRecipe);
+
+        return recipeToRecipeCommand.convert(savedRecipe);
     }
 }
