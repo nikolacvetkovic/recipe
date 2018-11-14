@@ -70,10 +70,4 @@ public class RecipeServiceImplTest {
         verify(recipeRepository, never()).findAll();
 
     }
-
-
-    @Test
-    public void testSaveRecipeCommand() {
-
-    }
 }
