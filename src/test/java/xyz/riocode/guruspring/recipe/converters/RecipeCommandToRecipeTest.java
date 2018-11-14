@@ -54,6 +54,7 @@ public class RecipeCommandToRecipeTest {
         recipeCommand.setDirections(DIRECTIONS);
         recipeCommand.setDifficulty(DIFFICULTY);
         recipeCommand.setDescription(DESCRIPTION);
+        recipeCommand.setUrl(URL);
 
         NotesCommand notesCommand = new NotesCommand();
         notesCommand.setId(NOTES_ID);
