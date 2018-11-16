@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import xyz.riocode.guruspring.recipe.commands.RecipeCommand;
 import xyz.riocode.guruspring.recipe.converters.RecipeCommandToRecipe;
 import xyz.riocode.guruspring.recipe.converters.RecipeToRecipeCommand;
 import xyz.riocode.guruspring.recipe.domain.Recipe;
@@ -69,5 +70,30 @@ public class RecipeServiceImplTest {
         verify(recipeRepository, times(1)).findById(anyLong());
         verify(recipeRepository, never()).findAll();
 
+    }
+
+    @Test
+    public void testFindRecipeCommandById(){
+        Long id = 1L;
+        Recipe recipe = new Recipe();
+        recipe.setId(id);
+
+        RecipeCommand recipeCommandToBeReturned = new RecipeCommand();
+        recipeCommandToBeReturned.setId(id);
+
+        when(recipeRepository.findById(anyLong())).thenReturn(Optional.of(recipe));
+        when(recipeToRecipeCommand.convert(any())).thenReturn((recipeCommandToBeReturned));
+
+        RecipeCommand recipeCommand = recipeService.findCommandById(id);
+
+        assertNotNull(recipeCommand);
+        assertEquals(id, recipeCommand.getId());
+        verify(recipeRepository).findById(anyLong());
+    }
+
+    @Test
+    public void testDeleteById(){
+        recipeService.deleteById(1L);
+        verify(recipeRepository).deleteById(anyLong());
     }
 }
