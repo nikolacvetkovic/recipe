@@ -5,6 +5,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import xyz.riocode.guruspring.recipe.commands.IngredientCommand;
 import xyz.riocode.guruspring.recipe.domain.Ingredient;
+import xyz.riocode.guruspring.recipe.domain.Recipe;
 
 @Component
 public class IngredientCommandToIngredient implements Converter<IngredientCommand, Ingredient> {
@@ -24,6 +25,12 @@ public class IngredientCommandToIngredient implements Converter<IngredientComman
         ingredient.setId(ingredientCommand.getId());
         ingredient.setDescription(ingredientCommand.getDescription());
         ingredient.setAmount(ingredientCommand.getAmount());
+        if(ingredientCommand.getRecipeId() != null) {
+            Recipe recipe = new Recipe();
+            recipe.setId(ingredientCommand.getRecipeId());
+            ingredient.setRecipe(recipe);
+            recipe.addIngredient(ingredient);
+        }
         ingredient.setUom(uomConverter.convert(ingredientCommand.getUom()));
 
         return ingredient;
