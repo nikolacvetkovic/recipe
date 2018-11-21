@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import xyz.riocode.guruspring.recipe.commands.IngredientCommand;
+import xyz.riocode.guruspring.recipe.commands.RecipeCommand;
+import xyz.riocode.guruspring.recipe.commands.UnitOfMeasureCommand;
 import xyz.riocode.guruspring.recipe.services.IngredientService;
 import xyz.riocode.guruspring.recipe.services.RecipeService;
 import xyz.riocode.guruspring.recipe.services.UnitOfMeasureService;
@@ -49,11 +51,27 @@ public class IngredientController {
         return "recipe/ingredient/ingredientform";
     }
 
+    @GetMapping("recipe/{recipeId}/ingredient/new")
+    public String getNewIngredientForm(@PathVariable String recipeId, Model model){
+
+        RecipeCommand recipeCommand = recipeService.findCommandById(Long.valueOf(recipeId));
+        //todo raise exception if null
+
+        IngredientCommand ingredientCommand = new IngredientCommand();
+        ingredientCommand.setRecipeId(Long.valueOf(recipeId));
+        ingredientCommand.setUom(new UnitOfMeasureCommand());
+        model.addAttribute("ingredient", ingredientCommand);
+
+        model.addAttribute("uomList", unitOfMeasureService.listAllUoms());
+
+        return "recipe/ingredient/ingredientform";
+    }
+
     @PostMapping("/recipe/{recipeId}/ingredient")
     public String saveOrUpdate(@ModelAttribute IngredientCommand ingredientCommand) {
 
-        IngredientCommand savedIngredientCommand = null;//ingredientService.
+        IngredientCommand savedIngredientCommand = ingredientService.saveIngredientCommand(ingredientCommand);
 
-        return "redirect:recipe/"+ savedIngredientCommand.getRecipeId() + "/ingredient/" + savedIngredientCommand.getId() + "/show";
+        return "redirect:/recipe/"+ savedIngredientCommand.getRecipeId() + "/ingredient/" + savedIngredientCommand.getId() + "/show";
     }
 }
