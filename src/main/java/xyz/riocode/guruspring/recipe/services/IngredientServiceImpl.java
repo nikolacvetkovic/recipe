@@ -1,6 +1,7 @@
 package xyz.riocode.guruspring.recipe.services;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import xyz.riocode.guruspring.recipe.commands.IngredientCommand;
 import xyz.riocode.guruspring.recipe.converters.IngredientCommandToIngredient;
 import xyz.riocode.guruspring.recipe.converters.IngredientToIngredientCommand;
@@ -48,6 +49,7 @@ public class IngredientServiceImpl implements IngredientService {
         return ingredientCommandOptional.get();
     }
 
+    @Transactional
     @Override
     public IngredientCommand saveIngredientCommand(IngredientCommand ingredientCommand) {
         Optional<Recipe> recipeOptional = recipeRepository.findById(ingredientCommand.getRecipeId());
@@ -93,6 +95,25 @@ public class IngredientServiceImpl implements IngredientService {
             return ingredientToIngredientCommand.convert(savedIngredientOptional.get());
         }
 
+    }
+
+    public void deleteIngredientById(Long recipeId, Long ingredientId){
+        Optional<Recipe> recipeOptional = recipeRepository.findById(recipeId);
+        if(!recipeOptional.isPresent()){
+
+        } else {
+            Recipe recipe = recipeOptional.get();
+
+            Optional<Ingredient> ingredientOptional = recipe.getIngredients().stream()
+                                    .filter(ingredient -> ingredient.getId().equals(ingredientId))
+                                    .findFirst();
+            if(ingredientOptional.isPresent()){
+                Ingredient ingredient = ingredientOptional.get();
+                ingredient.setRecipe(null);
+                recipe.getIngredients().remove(ingredient);
+                recipeRepository.save(recipe);
+            }
+        }
 
     }
 }
