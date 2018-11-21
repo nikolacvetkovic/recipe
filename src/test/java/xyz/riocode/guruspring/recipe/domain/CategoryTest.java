@@ -1,8 +1,10 @@
 package xyz.riocode.guruspring.recipe.domain;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 
@@ -25,13 +27,28 @@ public class CategoryTest {
         assertEquals(id, category.getId());
     }
 
-    @Ignore
     @Test
     public void getDescription() {
+        String description = "Description";
+        category.setDescription(description);
+
+        assertEquals("Description", category.getDescription());
+
     }
 
-    @Ignore
     @Test
     public void getRecipes() {
+        Set<Recipe> recipes = new HashSet<>();
+        Recipe recipe1 = new Recipe();
+        recipe1.setId(1L);
+        recipes.add(recipe1);
+        Recipe recipe2 = new Recipe();
+        recipe2.setId(2L);
+        recipes.add(recipe2);
+
+        category.setRecipes(recipes);
+
+        assertEquals(2, category.getRecipes().size());
+
     }
 }
