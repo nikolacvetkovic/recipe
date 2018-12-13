@@ -9,6 +9,7 @@ import xyz.riocode.guruspring.recipe.commands.RecipeCommand;
 import xyz.riocode.guruspring.recipe.converters.RecipeCommandToRecipe;
 import xyz.riocode.guruspring.recipe.converters.RecipeToRecipeCommand;
 import xyz.riocode.guruspring.recipe.domain.Recipe;
+import xyz.riocode.guruspring.recipe.exceptions.NotFoundException;
 import xyz.riocode.guruspring.recipe.repositories.RecipeRepository;
 
 import java.util.HashSet;
@@ -70,6 +71,13 @@ public class RecipeServiceImplTest {
         verify(recipeRepository, times(1)).findById(anyLong());
         verify(recipeRepository, never()).findAll();
 
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void testFindByIdNotFound(){
+        when(recipeRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        Recipe recipe = recipeService.findById(anyLong());
     }
 
     @Test

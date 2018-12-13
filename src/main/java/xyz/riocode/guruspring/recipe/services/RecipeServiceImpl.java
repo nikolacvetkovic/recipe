@@ -7,6 +7,7 @@ import xyz.riocode.guruspring.recipe.commands.RecipeCommand;
 import xyz.riocode.guruspring.recipe.converters.RecipeCommandToRecipe;
 import xyz.riocode.guruspring.recipe.converters.RecipeToRecipeCommand;
 import xyz.riocode.guruspring.recipe.domain.Recipe;
+import xyz.riocode.guruspring.recipe.exceptions.NotFoundException;
 import xyz.riocode.guruspring.recipe.repositories.RecipeRepository;
 
 import java.util.HashSet;
@@ -41,7 +42,7 @@ public class RecipeServiceImpl implements RecipeService {
     public Recipe findById(Long id) {
         Optional<Recipe> recipeOpt = recipeRepository.findById(id);
         if(!recipeOpt.isPresent()) {
-            throw new RuntimeException("Recipe not found!");
+            throw new NotFoundException("Recipe not found!");
         }
 
         return recipeOpt.get();
