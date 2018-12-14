@@ -27,13 +27,18 @@ public class RecipeControllerTest {
 
     RecipeController recipeController;
 
+    ControllerExceptionHandler controllerExceptionHandler;
+
     MockMvc mockMvc;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         recipeController = new RecipeController(recipeService);
-        mockMvc = MockMvcBuilders.standaloneSetup(recipeController).build();
+        controllerExceptionHandler = new ControllerExceptionHandler();
+        mockMvc = MockMvcBuilders.standaloneSetup(recipeController)
+                .setControllerAdvice(controllerExceptionHandler)
+                .build();
     }
 
     @Test
